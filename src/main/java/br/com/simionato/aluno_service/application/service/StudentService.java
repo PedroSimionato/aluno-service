@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -61,7 +62,7 @@ public class StudentService implements
         Student existing = repositoryPort.findById(command.id())
                 .orElseThrow(() -> new StudentException(StudentErrorCode.STUDENT_NOT_FOUND, command.id()));
 
-        Address address = new Address(
+        Address updatedAddress = new Address(
                 command.address().street().isBlank() ? existing.getAddress().getStreet() : command.address().street(),
                 command.address().number().isBlank() ? existing.getAddress().getNumber() : command.address().number(),
                 command.address().complement().isBlank() ? existing.getAddress().getComplement() : command.address().complement(),
@@ -71,26 +72,47 @@ public class StudentService implements
                 command.address().zipcode().isBlank() ? existing.getAddress().getZipcode() : command.address().zipcode()
         );
 
-        return null;
-    }
+        Student updated = new Student(
+                existing.getId(),
+                command.name().isBlank() ? existing.getName() : command.name(),
+                existing.getDocumentNumber(),
+                command.email().isBlank()? existing.getEmail() : command.email(),
+                command.academicLevel().isBlank()? existing.getAcademicLevel() : command.academicLevel(),
+                updatedAddress,
+                Objects.isNull(command.birthDate()) ? existing.getBirthDate() : command.birthDate(),
+                existing.getCreatedAt()
+        );
 
-    @Override
-    public void execute(DeleteStudentCommand command) {
-
+        return repositoryPort.update(updated)
+                .orElseThrow(() -> new StudentException(StudentErrorCode.STUDENT_NOT_FOUND, command.id()));
     }
 
     @Override
     public Student findById(FindStudentByIdCommand command) {
-        return null;
+
+        return repositoryPort.findById(command.id())
+                .orElseThrow(() -> new StudentException(StudentErrorCode.STUDENT_NOT_FOUND, command.id()));
     }
 
     @Override
     public Student findByDocumentNumber(FindStudentByDocumentNumberCommand command) {
-        return null;
+
+        return repositoryPort.findByDocumentNumber(command.documentNumber())
+                .orElseThrow(() -> new StudentException(StudentErrorCode.STUDENT_NOT_FOUND, command.documentNumber()));
     }
 
     @Override
     public List<Student> findAll() {
-        return List.of();
+
+        return repositoryPort.findAll();
+    }
+
+    @Override
+    public void execute(DeleteStudentCommand command) {
+        repositoryPort.findById(command.id())
+                .orElseThrow(() -> new StudentException(StudentErrorCode.STUDENT_NOT_FOUND, command.id()));
+
+        repositoryPort.deleteById(command.id());
+
     }
 }

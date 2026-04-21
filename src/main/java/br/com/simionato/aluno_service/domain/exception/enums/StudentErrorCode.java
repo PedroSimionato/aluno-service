@@ -9,7 +9,7 @@ public enum StudentErrorCode {
     INVALID_STUDENT_ADDRESS("INVALID_STUDENT", "student addres cannot be null"),
     INVALID_BIRTHDATE("INVALID_BRITHDATE", "invalid student birthdate"),
     STUDENT_ALREADY_EXISTS("STUDENT_ALREADY_EXISTS", "student with document number %s already exists"),
-    STUDENT_NOT_FOUND("STUDENT_NOT_FOUND", "student with id %s not found");
+    STUDENT_NOT_FOUND("STUDENT_NOT_FOUND", "student with identifier %s not found");
 
     private final String code;
     private final String messageTemplate;
