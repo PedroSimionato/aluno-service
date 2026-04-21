@@ -2,11 +2,13 @@ package br.com.simionato.aluno_service.domain.model;
 
 import br.com.simionato.aluno_service.domain.exception.AddressException;
 import br.com.simionato.aluno_service.domain.exception.enums.AddressErrorCode;
+import lombok.Getter;
 
 import java.util.stream.Stream;
 
 import static br.com.simionato.aluno_service.domain.utils.Validations.checkBlankFields;
 
+@Getter
 public class Address {
     private final String street;
     private final String number;

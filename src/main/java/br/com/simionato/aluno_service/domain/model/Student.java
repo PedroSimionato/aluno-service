@@ -2,6 +2,7 @@ package br.com.simionato.aluno_service.domain.model;
 
 import br.com.simionato.aluno_service.domain.exception.StudentException;
 import br.com.simionato.aluno_service.domain.exception.enums.StudentErrorCode;
+import lombok.Getter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ import java.util.stream.Stream;
 
 import static br.com.simionato.aluno_service.domain.utils.Validations.checkBlankFields;
 
-
+@Getter
 public class Student {
     private final UUID id;
     private final String name;

@@ -1,0 +1,35 @@
+aluno-service/
+│
+├── domain/                <-- coração (NÃO depende de nada)
+│   ├── model/
+│   │   └── Aluno.java
+│   ├── enums/
+│   │   └── StatusAluno.java
+│   ├── ports/
+│   │   ├── in/
+│   │   │   └── AlunoUseCase.java
+│   │   └── out/
+│   │       └── AlunoRepositoryPort.java
+│   └── exception/
+│
+├── application/           <-- regras de negócio
+│   └── service/
+│       └── AlunoService.java
+│
+├── adapters/
+│   ├── in/                <-- entrada (API)
+│   │   └── web/
+│   │       └── AlunoController.java
+│   │
+│   └── out/               <-- saída (infra)
+│       └── persistence/
+│           ├── entity/
+│           │   └── AlunoEntity.java
+│           ├── repository/
+│           │   └── SpringDataAlunoRepository.java
+│           └── adapter/
+│               └── AlunoRepositoryAdapter.java
+│
+├── config/                <-- configs Spring
+│
+└── AlunoServiceApplication.java
