@@ -3,6 +3,7 @@ package br.com.simionato.aluno_service.domain.model;
 import br.com.simionato.aluno_service.domain.exception.StudentException;
 import br.com.simionato.aluno_service.domain.exception.enums.StudentErrorCode;
 import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

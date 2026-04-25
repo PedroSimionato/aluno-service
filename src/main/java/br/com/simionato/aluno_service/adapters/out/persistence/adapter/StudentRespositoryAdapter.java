@@ -47,6 +47,7 @@ public class StudentRespositoryAdapter implements StudentRepositoryPort {
 
     @Override
     public List<Student> findAll() {
+        System.out.println();
         return repository.findAll().stream().map(mapper::toDomain).toList();
     }
 
