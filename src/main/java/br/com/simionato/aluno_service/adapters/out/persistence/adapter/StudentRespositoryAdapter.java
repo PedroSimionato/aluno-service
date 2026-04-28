@@ -46,6 +46,12 @@ public class StudentRespositoryAdapter implements StudentRepositoryPort {
     }
 
     @Override
+    public Optional<Student> findByEmail(String email) {
+        return repository.findByEmail(email)
+                .map(mapper::toDomain);
+    }
+
+    @Override
     public List<Student> findAll() {
         System.out.println();
         return repository.findAll().stream().map(mapper::toDomain).toList();

@@ -9,4 +9,5 @@ import java.util.UUID;
 public interface StudentJpaRepository extends JpaRepository<StudentEntity, UUID> {
 
     Optional<StudentEntity> findByDocumentNumber(String documentNumber);
+    Optional<StudentEntity> findByEmail(String email);
 }

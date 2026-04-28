@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static br.com.simionato.aluno_service.domain.utils.Validations.parseStringToLocalDate;
@@ -102,13 +103,13 @@ public class StudentController {
 
     private CreateAddressCommand createAddressCommand(StudentRequestDto request) {
         return new CreateAddressCommand(
-                request.address().street().isBlank() ? null : request.address().street(),
-                request.address().number().isBlank() ? null : request.address().number(),
-                request.address().complement().isBlank() ? null : request.address().complement(),
-                request.address().neighborhood().isBlank() ? null : request.address().neighborhood(),
-                request.address().city().isBlank() ? null : request.address().city(),
-                request.address().state().isBlank() ? null : request.address().state(),
-                request.address().zipcode().isBlank() ? null : request.address().zipcode()
+                request.address().street(),
+                request.address().number(),
+                request.address().complement(),
+                request.address().neighborhood(),
+                request.address().city(),
+                request.address().state(),
+                request.address().zipcode()
         );
     }
 

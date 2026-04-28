@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +34,11 @@ public class StudentService implements
         repositoryPort.findByDocumentNumber(command.documentNumber())
                 .ifPresent(student -> {
                     throw new StudentException(StudentErrorCode.STUDENT_ALREADY_EXISTS, command.documentNumber());
+                });
+
+        repositoryPort.findByEmail(command.email())
+                .ifPresent(student -> {
+                    throw new StudentException(StudentErrorCode.EMAIL_ALREADY_EXISTS, command.email());
                 });
 
         Address address = new Address(
@@ -61,6 +67,12 @@ public class StudentService implements
 
     @Override
     public Student execute(UpdateStudentCommand command) {
+
+        repositoryPort.findByEmail(command.email())
+                .ifPresent(student -> {
+                    throw new StudentException(StudentErrorCode.EMAIL_ALREADY_EXISTS, command.email());
+                });
+
         Student existing = repositoryPort.findById(command.id())
                 .orElseThrow(() -> new StudentException(StudentErrorCode.STUDENT_NOT_FOUND, command.id()));
 
@@ -68,12 +80,12 @@ public class StudentService implements
 
         Student updated = new Student(
                 existing.getId(),
-                StringUtils.isBlank(command.name()) ? existing.getName() : command.name(),
+                Optional.ofNullable(command.name()).orElse(existing.getName()),
                 existing.getDocumentNumber(),
-                StringUtils.isBlank(command.email()) ? existing.getEmail() : command.email(),
-                StringUtils.isBlank(command.academicLevel()) ? existing.getAcademicLevel() : command.academicLevel(),
+                Optional.ofNullable(command.email()).orElse(existing.getEmail()),
+                Optional.ofNullable(command.academicLevel()).orElse(existing.getAcademicLevel()),
                 updatedAddress,
-                Objects.isNull(command.birthDate()) ? existing.getBirthDate() : command.birthDate(),
+                Optional.ofNullable(command.birthDate()).orElse(existing.getBirthDate()),
                 existing.getCreatedAt()
         );
 
@@ -112,13 +124,13 @@ public class StudentService implements
 
     private static @NonNull Address createUpdatedAddress(UpdateStudentCommand command, Student existing) {
         return new Address(
-                StringUtils.isBlank(command.address().street()) ? existing.getAddress().getStreet() : command.address().street(),
-                StringUtils.isBlank(command.address().number()) ? existing.getAddress().getNumber() : command.address().number(),
-                StringUtils.isBlank(command.address().complement()) ? existing.getAddress().getComplement() : command.address().complement(),
-                StringUtils.isBlank(command.address().neighborhood()) ? existing.getAddress().getNeighborhood() : command.address().neighborhood(),
-                StringUtils.isBlank(command.address().city()) ? existing.getAddress().getCity() : command.address().city(),
-                StringUtils.isBlank(command.address().state()) ? existing.getAddress().getState() : command.address().state(),
-                StringUtils.isBlank(command.address().zipcode()) ? existing.getAddress().getZipcode() : command.address().zipcode()
+                Optional.ofNullable(command.address().street()).orElse(existing.getAddress().getStreet()),
+                Optional.ofNullable(command.address().number()).orElse(existing.getAddress().getNumber()),
+                Optional.ofNullable(command.address().complement()).orElse(existing.getAddress().getComplement()),
+                Optional.ofNullable(command.address().neighborhood()).orElse(existing.getAddress().getNeighborhood()),
+                Optional.ofNullable(command.address().city()).orElse(existing.getAddress().getCity()),
+                Optional.ofNullable(command.address().state()).orElse(existing.getAddress().getState()),
+                Optional.ofNullable(command.address().zipcode()).orElse(existing.getAddress().getZipcode())
         );
     }
 }

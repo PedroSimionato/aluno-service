@@ -11,6 +11,7 @@ public interface StudentRepositoryPort {
     Optional<Student> update(Student student);
     Optional<Student> findById(UUID id);
     Optional<Student> findByDocumentNumber(String documentNumber);
+    Optional<Student> findByEmail(String email);
     List<Student> findAll();
     void deleteById(UUID id);
 
