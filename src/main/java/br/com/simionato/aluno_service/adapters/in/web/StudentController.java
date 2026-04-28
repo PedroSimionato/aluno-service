@@ -62,7 +62,7 @@ public class StudentController {
                 request.email(),
                 request.academicLevel(),
                 addressCommand,
-                parseStringToLocalDate(request.birthDate())
+                Objects.isNull(request.birthDate()) ? null : parseStringToLocalDate(request.birthDate())
         );
 
         var student = updateStudentUseCase.execute(command);

@@ -17,10 +17,6 @@ public class AddressEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_id")
-    private StudentEntity student;
-
     @Column(name = "street", nullable = false)
     private String street;
 

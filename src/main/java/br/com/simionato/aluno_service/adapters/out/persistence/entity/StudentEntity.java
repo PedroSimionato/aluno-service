@@ -22,7 +22,7 @@ import java.util.UUID;
 public class StudentEntity {
     @Id
     @Column(name = "id", nullable = false)
-    @GeneratedValue(strategy = GenerationType.UUID)
+//    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @Column(name = "name", nullable = false)
@@ -37,7 +37,8 @@ public class StudentEntity {
     @Column(name = "academic_level", nullable = false)
     private String academicLevel;
 
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
     private AddressEntity address;
 
     @Column(name = "birth_date", nullable = false)

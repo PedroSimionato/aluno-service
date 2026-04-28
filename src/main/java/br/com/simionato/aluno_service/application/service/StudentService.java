@@ -11,6 +11,8 @@ import br.com.simionato.aluno_service.domain.ports.in.UpdateStudentUseCase;
 import br.com.simionato.aluno_service.domain.ports.in.command.*;
 import br.com.simionato.aluno_service.domain.ports.out.StudentRepositoryPort;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,22 +64,14 @@ public class StudentService implements
         Student existing = repositoryPort.findById(command.id())
                 .orElseThrow(() -> new StudentException(StudentErrorCode.STUDENT_NOT_FOUND, command.id()));
 
-        Address updatedAddress = new Address(
-                command.address().street().isBlank() ? existing.getAddress().getStreet() : command.address().street(),
-                command.address().number().isBlank() ? existing.getAddress().getNumber() : command.address().number(),
-                command.address().complement().isBlank() ? existing.getAddress().getComplement() : command.address().complement(),
-                command.address().neighborhood().isBlank() ? existing.getAddress().getNeighborhood() : command.address().neighborhood(),
-                command.address().city().isBlank() ? existing.getAddress().getCity() : command.address().city(),
-                command.address().state().isBlank() ? existing.getAddress().getState() : command.address().state(),
-                command.address().zipcode().isBlank() ? existing.getAddress().getZipcode() : command.address().zipcode()
-        );
+        Address updatedAddress = Objects.isNull(command.address()) ? existing.getAddress() : createUpdatedAddress(command, existing);
 
         Student updated = new Student(
                 existing.getId(),
-                command.name().isBlank() ? existing.getName() : command.name(),
+                StringUtils.isBlank(command.name()) ? existing.getName() : command.name(),
                 existing.getDocumentNumber(),
-                command.email().isBlank()? existing.getEmail() : command.email(),
-                command.academicLevel().isBlank()? existing.getAcademicLevel() : command.academicLevel(),
+                StringUtils.isBlank(command.email()) ? existing.getEmail() : command.email(),
+                StringUtils.isBlank(command.academicLevel()) ? existing.getAcademicLevel() : command.academicLevel(),
                 updatedAddress,
                 Objects.isNull(command.birthDate()) ? existing.getBirthDate() : command.birthDate(),
                 existing.getCreatedAt()
@@ -114,5 +108,17 @@ public class StudentService implements
 
         repositoryPort.deleteById(command.id());
 
+    }
+
+    private static @NonNull Address createUpdatedAddress(UpdateStudentCommand command, Student existing) {
+        return new Address(
+                StringUtils.isBlank(command.address().street()) ? existing.getAddress().getStreet() : command.address().street(),
+                StringUtils.isBlank(command.address().number()) ? existing.getAddress().getNumber() : command.address().number(),
+                StringUtils.isBlank(command.address().complement()) ? existing.getAddress().getComplement() : command.address().complement(),
+                StringUtils.isBlank(command.address().neighborhood()) ? existing.getAddress().getNeighborhood() : command.address().neighborhood(),
+                StringUtils.isBlank(command.address().city()) ? existing.getAddress().getCity() : command.address().city(),
+                StringUtils.isBlank(command.address().state()) ? existing.getAddress().getState() : command.address().state(),
+                StringUtils.isBlank(command.address().zipcode()) ? existing.getAddress().getZipcode() : command.address().zipcode()
+        );
     }
 }
