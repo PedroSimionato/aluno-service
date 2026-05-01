@@ -2,9 +2,9 @@ spring:
   application:
     name: aluno-service
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: admin
+    url: jdbc:postgresql://db:5432/postgres
+    username: myuser
+    password: mypassword
     driver-class-name: org.postgresql.Driver
   jpa:
     properties:

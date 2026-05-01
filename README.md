@@ -39,49 +39,46 @@ src/main/java/br/com/simionato/aluno_service/
 *   **SpringDoc OpenAPI (Swagger)** (Documentação da API)
 *   **Docker** (Containerização)
 
-## 🚀 Como Rodar o Projeto
+## 🚀 Como Rodar o Projeto (com Docker Compose)
 
 ### Pré-requisitos
-*   Docker instalado
-*   JDK 21
-*   Maven
+*   Docker e Docker Compose instalados
 
-### 1. Subir o Banco de Dados (PostgreSQL) com Docker
+### 1. Gerar o JAR da Aplicação
 
-Como o projeto está configurado para buscar o banco em `localhost:5432` (conforme `application.yaml`), você pode subir um container rapidamente com o seguinte comando:
+Antes de construir a imagem Docker da aplicação, você precisa gerar o arquivo JAR executável. Navegue até a raiz do projeto e execute:
 
 ```bash
-docker run --name postgres-aluno -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=postgres -e POSTGRES_DB=postgres -p 5432:5432 -d postgres
+./mvnw clean install -DskipTests
 ```
 
-Ou, se preferir criar um arquivo `docker-compose.yml` na raiz:
+### 2. Iniciar os Serviços com Docker Compose
 
-```yaml
-version: '3.8'
-services:
-  db:
-    image: postgres
-    container_name: postgres-aluno
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: admin
-      POSTGRES_DB: postgres
-    ports:
-      - "5432:5432"
-```
-E rodar: `docker-compose up -d`
-
-### 2. Executar a Aplicação
-
-Com o banco rodando, execute o comando Maven:
+Com o JAR gerado, você pode construir as imagens Docker e iniciar todos os serviços (aplicação e banco de dados) usando o Docker Compose. Navegue até a raiz do projeto (onde o `docker-compose.yml` está localizado) e execute:
 
 ```bash
-./mvnw spring-boot:run
+docker-compose up --build -d
 ```
+
+Este comando irá:
+*   Construir a imagem Docker da aplicação (`app`) usando o `Dockerfile`.
+*   Subir o container do PostgreSQL (`db`).
+*   Iniciar a aplicação (`app`), que se conectará ao banco de dados.
 
 A aplicação estará disponível em: `http://localhost:8080/student-manager`
 
-### 3. Documentação (Swagger)
+### 3. Variáveis de Ambiente do Banco de Dados
+
+As configurações do banco de dados são definidas no `docker-compose.yml` para o serviço `app`:
+*   **DB_HOST**: `db` (nome do serviço do banco de dados no Docker Compose)
+*   **DB_PORT**: `5432`
+*   **DB_NAME**: `mydatabase`
+*   **DB_USER**: `myuser`
+*   **DB_PASSWORD**: `mypassword`
+
+Certifique-se de que sua aplicação esteja configurada para usar essas variáveis de ambiente para conexão com o banco de dados.
+
+### 4. Documentação (Swagger)
 
 Acesse a documentação da API em:
 `http://localhost:8080/student-manager/swagger-ui/index.html`
