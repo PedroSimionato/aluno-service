@@ -1,0 +1,30 @@
+{
+  "id": "foo123",
+  "name": "programming logic",
+  "code": "PGL01",
+  "workload": 80,
+  "syllabus": "Introduction to the Basics of Programming Logic"
+}
+
+
+
+
+
+
+
+
+
+{
+  "id": "foo123",
+  "degree": "Graduation",
+  "type": "Bachelor",
+  "area": "STEM",
+  "name": "Computer science",
+  "semesters": 4,
+  "price" : "800.00",
+  "subjects": [
+    {
+
+    }
+  ]
+}
