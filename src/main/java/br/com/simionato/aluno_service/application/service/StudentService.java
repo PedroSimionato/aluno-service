@@ -1,5 +1,6 @@
 package br.com.simionato.aluno_service.application.service;
 
+import br.com.simionato.aluno_service.domain.AcademicLevelEnum;
 import br.com.simionato.aluno_service.domain.exception.StudentException;
 import br.com.simionato.aluno_service.domain.exception.enums.StudentErrorCode;
 import br.com.simionato.aluno_service.domain.model.Address;
@@ -41,6 +42,8 @@ public class StudentService implements
                     throw new StudentException(StudentErrorCode.EMAIL_ALREADY_EXISTS, command.email());
                 });
 
+        AcademicLevelEnum academicLevelEnum = AcademicLevelEnum.ofName(command.academicLevel());
+
         Address address = new Address(
                 command.address().street(),
                 command.address().number(),
@@ -56,7 +59,7 @@ public class StudentService implements
                 command.name(),
                 command.documentNumber(),
                 command.email(),
-                command.academicLevel(),
+                academicLevelEnum.name(),
                 address,
                 command.birthDate(),
                 null
@@ -76,6 +79,9 @@ public class StudentService implements
         Student existing = repositoryPort.findById(command.id())
                 .orElseThrow(() -> new StudentException(StudentErrorCode.STUDENT_NOT_FOUND, command.id()));
 
+        String academicLevel = StringUtils.isBlank(command.academicLevel()) ?
+                existing.getAcademicLevel() : AcademicLevelEnum.ofName(command.academicLevel()).name();
+
         Address updatedAddress = Objects.isNull(command.address()) ? existing.getAddress() : createUpdatedAddress(command, existing);
 
         Student updated = new Student(
@@ -83,7 +89,7 @@ public class StudentService implements
                 Optional.ofNullable(command.name()).orElse(existing.getName()),
                 existing.getDocumentNumber(),
                 Optional.ofNullable(command.email()).orElse(existing.getEmail()),
-                Optional.ofNullable(command.academicLevel()).orElse(existing.getAcademicLevel()),
+                academicLevel,
                 updatedAddress,
                 Optional.ofNullable(command.birthDate()).orElse(existing.getBirthDate()),
                 existing.getCreatedAt()

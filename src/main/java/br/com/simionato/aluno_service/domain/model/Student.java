@@ -3,7 +3,6 @@ package br.com.simionato.aluno_service.domain.model;
 import br.com.simionato.aluno_service.domain.exception.StudentException;
 import br.com.simionato.aluno_service.domain.exception.enums.StudentErrorCode;
 import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -26,7 +25,7 @@ public class Student {
     private final LocalDateTime updatedAt;
 
     public Student(UUID id, String name, String documentNumber, String email, String academicLevel, Address address, LocalDate birthDate, LocalDateTime createdAt) {
-        checkFields(name, documentNumber, email, academicLevel);
+        checkFields(name, documentNumber, email);
         checkBirthDate(birthDate);
         checkIfAddressIsNull(address);
 
@@ -41,12 +40,11 @@ public class Student {
         this.updatedAt = LocalDateTime.now();
     }
 
-    private static void checkFields(String name, String documentNumber, String email, String academicLevel){
+    private static void checkFields(String name, String documentNumber, String email){
         boolean fieldsInvalid = checkBlankFields(Stream.of(
                 name,
                 documentNumber,
-                email,
-                academicLevel
+                email
         ));
 
         if (fieldsInvalid) {
