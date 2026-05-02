@@ -6,15 +6,14 @@ import org.springframework.http.HttpStatus;
 import java.util.stream.Stream;
 
 @Getter
-public enum AddressErrorCode {
-
-    INVALID_ADDRESS("INVALID_ADDRESS", "address fields cannot be empty", HttpStatus.NOT_ACCEPTABLE);
+public enum AcademicLevelErrorCode {
+    INVALID_ACADEMIC_LEVEL("INVALID_ACADEMIC_LEVEL", "academic level %s does not exists", HttpStatus.NOT_ACCEPTABLE);
 
     private final String code;
     private final String messageTemplate;
     private final HttpStatus status;
 
-    AddressErrorCode(String code, String messageTemplate, HttpStatus status){
+    AcademicLevelErrorCode(String code, String messageTemplate, HttpStatus status){
         this.code = code;
         this.messageTemplate = messageTemplate;
         this.status = status;
@@ -24,7 +23,7 @@ public enum AddressErrorCode {
         return String.format(messageTemplate, args);
     }
 
-    public static AddressErrorCode ofErrorCode(String errorCode){
+    public static AcademicLevelErrorCode ofErrorCode(String errorCode){
         return Stream.of(values())
                 .filter(value -> value.getCode().equals(errorCode))
                 .findFirst()

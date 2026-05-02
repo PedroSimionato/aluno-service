@@ -9,7 +9,7 @@ public class AddressException extends RuntimeException{
     private final String errorCode;
 
     public AddressException(AddressErrorCode addressErrorCode, Object... messageArgs){
-        super(addressErrorCode.fomatMessage(messageArgs));
+        super(addressErrorCode.formatMessage(messageArgs));
         this.errorCode = addressErrorCode.getCode();
     }
 }
